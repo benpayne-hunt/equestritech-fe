@@ -5,9 +5,17 @@
     flex-direction: row;
     align-items: center;
     font-size: calc(10px + 2vmin);
-    color: white;
+    color: rgb(103, 100, 100);
+    height: 90px;
 }
 
 .Header-Text {
+  margin-left: 2em;
+  font-size: 1.5em;
+}
+
+.Logo {
+  height: 75px;
   margin-left: 1em;
+  filter: opacity(0.5) drop-shadow(0 0 0 white);
 }

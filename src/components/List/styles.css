@@ -1,8 +1,6 @@
 .Container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  flex-direction: row;
   width: 100%;
   margin-bottom: 20px;
 }
@@ -11,14 +9,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   width: 100%;
   margin-bottom: 20px;
 }
 
 .List-Card {
-  width: 100%;
-  max-width: 500px;
+  width: 450px;
+  height: 150px;
   background-color: #2f3239;
   border-radius: 25px;
   border: 1px solid #333843;
@@ -26,6 +23,42 @@
   margin-bottom: 10px;
   display: flex;
   flex-direction: row;
-  align-items: center;
   justify-content: space-between;
+}
+
+.Image-Flag {
+  display: flex;
+}
+
+.Profile-Image {
+  height: 150px;
+  border-radius: 50%;
+  border: 1px solid #787c84;
+}
+
+.Flag {
+  position: absolute;
+  padding-left: 110px;
+  padding-top: 110px;
+  width: 40px;
+}
+
+.Details {
+  display: flex;
+  flex-direction: column;
+}
+
+.Age-Sex {
+  display: flex;
+}
+
+.Rider-Age {
+  display: flex;
+  margin-right: 20px;
+  font-size: medium;
+}
+
+.Rider-Sex {
+  display: flex;
+  font-size: medium;
 }
