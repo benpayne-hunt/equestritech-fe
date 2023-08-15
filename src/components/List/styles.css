@@ -46,6 +46,7 @@
 .Details {
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
 }
 
 .Age-Sex {
