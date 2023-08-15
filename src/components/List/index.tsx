@@ -7,7 +7,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import MountsSection from './components/MountsSection';
 import RecordSection from './components/RecordSection';
-import callAPi from '../../helpers/callApi';
+import callApi from '../../helpers/callApi';
 import './styles.css';
 
 interface Rider {
@@ -30,15 +30,35 @@ const List = () => {
 
   useEffect(() => {
     const fetchRiders = async () => {
-      const riders = await callAPi({ method: 'GET', path: 'riders/all' });
+      const riders = await callApi({ method: 'GET', path: 'riders/all' });
       setRiders(riders);
     };
 
     fetchRiders();
   }, []);
 
-  const handleClickSave = useCallback(() => {
-    
+  const handleClickSave = useCallback((id: string) => {
+    const updateRider = async () => {
+      await callApi({
+        method: 'POST',
+        path: `riders/update`,
+        body: {
+          riderId: id,
+          foreName: '',
+          surName: '',
+          countryCode: '',
+          sex: '',
+          age: 0,
+          record: [],
+          mountIds: [],
+          imageUrl: '',
+        },
+      });
+      const riders = await callApi({ method: 'GET', path: 'riders/all' });
+      setRiders(riders);
+    };
+
+    updateRider();
   }, []);
 
   const handleClickEdit = useCallback((index: number) => {
@@ -51,12 +71,12 @@ const List = () => {
 
   const handleClickDelete = useCallback((id: string) => {
     const deleteRider = async () => {
-      await callAPi({
+      await callApi({
         method: 'POST',
         path: `riders/delete`,
         body: { riderId: id },
       });
-      const riders = await callAPi({ method: 'GET', path: 'riders/all' });
+      const riders = await callApi({ method: 'GET', path: 'riders/all' });
       setRiders(riders);
     };
 
@@ -89,7 +109,7 @@ const List = () => {
               <div className='Actions-Row'>
                 {isEditable ? (
                   <Tooltip title='Save' placement='top'>
-                    <IconButton onClick={() => handleClickSave()}>
+                    <IconButton onClick={() => handleClickSave(rider?._id)}>
                       <SaveIcon className='Icon' />
                     </IconButton>
                   </Tooltip>
@@ -129,8 +149,8 @@ const List = () => {
     });
 
     const createCard = (
-      <Tooltip title='Create' placement='bottom-end'>
-        <div key='create' className='Create-Card'>
+      <Tooltip key='create' title='Create' placement='bottom-end'>
+        <div className='Create-Card'>
           <IconButton onClick={() => {}}>
             <AddCircleOutlineIcon className='Icon' />
           </IconButton>

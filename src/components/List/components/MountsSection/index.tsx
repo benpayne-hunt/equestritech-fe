@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import callAPi from '../../../../helpers/callApi';
+import callApi from '../../../../helpers/callApi';
 
 type Mount = {
   _id: string;
@@ -25,7 +25,7 @@ const MountsSection = (props: Props) => {
 
   useEffect(() => {
     const fetchMounts = async () => {
-      const mounts = await callAPi({
+      const mounts = await callApi({
         method: 'POST',
         path: 'mounts/fetch',
         body: { mountIds },
@@ -39,8 +39,8 @@ const MountsSection = (props: Props) => {
   const mountsElement = useMemo(() => {
     return mounts.map((mount) => {
       return (
-        <div key={mount._id}>
-          <p>{mount.stableName}</p>
+        <div key={mount?._id}>
+          <p>{mount?.stableName}</p>
         </div>
       );
     });

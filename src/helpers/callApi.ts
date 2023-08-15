@@ -6,10 +6,10 @@ interface Props {
   body?: object;
 }
 
-const callAPi = async (props: Props) => {
+const callApi = async (props: Props) => {
   const { method, path, body } = props;
 
-  const url = `http://127.0.0.1:8001/api/${path}`;
+  const url = `http://127.0.0.1:8000/api/${path}`;
   let data = null;
 
   if (method === 'GET') {
@@ -31,4 +31,4 @@ const callAPi = async (props: Props) => {
   return data;
 };
 
-export default callAPi;
+export default callApi;
