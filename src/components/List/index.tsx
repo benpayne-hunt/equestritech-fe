@@ -1,6 +1,7 @@
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import SaveIcon from '@mui/icons-material/Save';
 import { CircularProgress, IconButton, Tooltip } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -25,7 +26,7 @@ interface Rider {
 
 const List = () => {
   const [riders, setRiders] = useState<Rider[]>([]);
-  const [expandedRiderId, setExpandedRiderId] = useState<string | null>(null);
+  const [editableCardIndex, setEditableCardIndex] = useState<number>(-1);
 
   useEffect(() => {
     const fetchRiders = async () => {
@@ -36,20 +37,25 @@ const List = () => {
     fetchRiders();
   }, []);
 
-  const handleClick = useCallback(
-    (id: string) => {
-      if (id === expandedRiderId) {
-        setExpandedRiderId(null);
-      } else {
-        setExpandedRiderId(id);
-      }
-    },
-    [expandedRiderId]
-  );
+  const handleClickSave = useCallback(() => {
+    
+  }, []);
+
+  const handleClickEdit = useCallback((index: number) => {
+    if (index === editableCardIndex) {
+      setEditableCardIndex(-1);
+    } else {
+      setEditableCardIndex(index);
+    }
+  }, [editableCardIndex]);
 
   const handleClickDelete = useCallback((id: string) => {
     const deleteRider = async () => {
-      await callAPi({ method: 'POST', path: `riders/delete`, body: { riderId: id } });
+      await callAPi({
+        method: 'POST',
+        path: `riders/delete`,
+        body: { riderId: id },
+      });
       const riders = await callAPi({ method: 'GET', path: 'riders/all' });
       setRiders(riders);
     };
@@ -58,9 +64,11 @@ const List = () => {
   }, []);
 
   const cards = useMemo(() => {
-    return riders?.map((rider: Rider) => {
+    const ridersCards = riders?.map((rider: Rider, index) => {
       const riderName = `${rider.foreName} ${rider.surName}`;
+      const isEditable = editableCardIndex === index;
 
+      // This card component could be refactored into its own component
       return (
         <div key={rider?._id} className='Card'>
           <div className='List-Card'>
@@ -79,34 +87,36 @@ const List = () => {
             </div>
             <div className='Details'>
               <div className='Actions-Row'>
+                {isEditable ? (
+                  <Tooltip title='Save' placement='top'>
+                    <IconButton onClick={() => handleClickSave()}>
+                      <SaveIcon className='Icon' />
+                    </IconButton>
+                  </Tooltip>
+                ) : null}
                 <Tooltip title='Edit' placement='top'>
-                  <IconButton onClick={() => {}}>
+                  <IconButton onClick={() => handleClickEdit(index)}>
                     <EditIcon className='Icon' />
                   </IconButton>
                 </Tooltip>
                 <Tooltip title='Delete' placement='top'>
                   <IconButton
-                    onClick={() => {
-                      handleClickDelete(rider?._id);
-                    }}
+                    onClick={() => handleClickDelete(rider?._id)}
                   >
                     <DeleteIcon className='Icon' />
                   </IconButton>
                 </Tooltip>
-                <Tooltip title='Expand' placement='top'>
-                  <IconButton
-                    onClick={() => {
-                      handleClick(rider?._id);
-                    }}
-                  >
-                    <KeyboardArrowDownIcon className='Icon' />
-                  </IconButton>
-                </Tooltip>
               </div>
-              <h3 className='Rider-Name'>{riderName}</h3>
+              <h3 contentEditable={isEditable} className='Rider-Name'>
+                {riderName}
+              </h3>
               <div className='Age-Sex'>
-                <p className='Rider-Age'>{rider?.age} yr old</p>
-                <p className='Rider-Sex'>{rider?.sex}</p>
+                <p contentEditable={isEditable} className='Rider-Age'>
+                  {rider?.age} yr old
+                </p>
+                <p contentEditable={isEditable} className='Rider-Sex'>
+                  {rider?.sex}
+                </p>
               </div>
             </div>
           </div>
@@ -117,7 +127,21 @@ const List = () => {
         </div>
       );
     });
-  }, [handleClick, handleClickDelete, riders]);
+
+    const createCard = (
+      <Tooltip title='Create' placement='bottom-end'>
+        <div key='create' className='Create-Card'>
+          <IconButton onClick={() => {}}>
+            <AddCircleOutlineIcon className='Icon' />
+          </IconButton>
+        </div>
+      </Tooltip>
+    );
+
+    ridersCards.unshift(createCard);
+
+    return ridersCards;
+  }, [editableCardIndex, handleClickDelete, handleClickEdit, handleClickSave, riders]);
 
   return (
     <div className='Container'>
