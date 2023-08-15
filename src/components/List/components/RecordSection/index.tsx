@@ -1,6 +1,6 @@
+import { Tooltip } from '@mui/material';
 import { useCallback, useMemo } from 'react';
 
-import { Tooltip } from '@mui/material';
 import './styles.css';
 
 interface Props {
@@ -34,7 +34,6 @@ const RecordSection = (props: Props) => {
 
   const prizeElement = useMemo(() => {
     let recordElement: JSX.Element[] = [];
-    console.log(record);
 
     record.forEach((event, eventIndex) => {
       const eventKeys = Object.keys(event);
@@ -43,7 +42,6 @@ const RecordSection = (props: Props) => {
       const eventElement = eventKeys.map((key, index) => {
         return (
           <div key={Math.random()} className='Trophy'>
-            {/* <p className='Event-Name'>{key}</p> */}
             <Tooltip
               title={`${
                 eventIndex === 0 ? 'Badminton' : 'Championships'
