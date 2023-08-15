@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import RecordSection from './components/RecordSection';
 import callAPi from '../../helpers/callApi';
 import './styles.css';
+import { Tooltip } from '@mui/material';
 
 interface Rider {
   _id: string;
@@ -37,11 +38,13 @@ const List = () => {
           <div className='List-Card'>
             <div className='Image-Flag'>
               <img className='Profile-Image' src={rider.imageUrl} alt='' />
-              <img
-                className='Flag'
-                src={`https://flagsapi.com/${rider.countryCode}/shiny/64.png`}
-                alt=''
-              />
+              <Tooltip title={rider.countryCode} placement='right-end'>
+                <img
+                  className='Flag'
+                  src={`https://flagsapi.com/${rider.countryCode}/shiny/64.png`}
+                  alt=''
+                />
+              </Tooltip>
             </div>
             <div className='Details'>
               <h3 className='Rider-Name'>

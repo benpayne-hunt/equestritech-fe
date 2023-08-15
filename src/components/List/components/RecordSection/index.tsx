@@ -25,7 +25,7 @@ const RecordSection = (props: Props) => {
       return '🥉';
     }
 
-    if (value === 4) {
+    if (value === -1) {
       return '✖️';
     }
 
