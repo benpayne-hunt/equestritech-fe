@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import './styles.css';
+import RecordSection from './components/RecordSection';
 import callAPi from '../../helpers/callApi';
+import './styles.css';
 
 interface Rider {
   _id: string;
@@ -10,7 +11,9 @@ interface Rider {
   countryCode: string;
   sex: string;
   age: number;
-  record: Object;
+  record: {
+    [key: string]: number;
+  }[];
   mountIds: string[];
   imageUrl: string;
 }
@@ -30,24 +33,30 @@ const List = () => {
   const cards = useMemo(() => {
     return riders?.map((rider: Rider) => {
       return (
-        <div key={rider._id} className='List-Card'>
-          <div className='Image-Flag'>
-            <img className='Profile-Image' src={rider.imageUrl} alt='' />
-            <img
-              className='Flag'
-              src={`https://flagsapi.com/${rider.countryCode}/shiny/64.png`}
-              alt=''
-            />
-          </div>
-          <div className='Details'>
-            <h3>
-              {rider.foreName} {rider.surName}
-            </h3>
-            <div className='Age-Sex'>
-              <p className='Rider-Age'>{rider.age} yr old</p>
-              <p className='Rider-Sex'>{rider.sex}</p>
+        <div key={rider._id} className='Card'>
+          <div className='List-Card'>
+            <div className='Image-Flag'>
+              <img className='Profile-Image' src={rider.imageUrl} alt='' />
+              <img
+                className='Flag'
+                src={`https://flagsapi.com/${rider.countryCode}/shiny/64.png`}
+                alt=''
+              />
+            </div>
+            <div className='Details'>
+              <h3 className='Rider-Name'>
+                {rider.foreName} {rider.surName}
+              </h3>
+              <div className='Age-Sex'>
+                <p className='Rider-Age'>{rider.age} yr old</p>
+                <p className='Rider-Sex'>{rider.sex}</p>
+              </div>
             </div>
           </div>
+          <div className='Record'>
+            <RecordSection record={rider.record} />
+          </div>
+          {/** Mount section here */}
         </div>
       );
     });

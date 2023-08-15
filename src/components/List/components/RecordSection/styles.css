@@ -1,0 +1,26 @@
+.Record-Section {
+  display: flex;
+  flex-direction: row;
+}
+
+.Prize-Cabinet {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.Trophy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Event-Name {
+  display: flex;
+  font-size: medium;
+}
+
+.Trophy-Value {
+  display: flex;
+  font-size: x-large;
+}
