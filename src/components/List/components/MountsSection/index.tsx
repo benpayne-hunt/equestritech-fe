@@ -64,7 +64,11 @@ const MountsSection = (props: Props) => {
     });
   }, [mounts]);
 
-  return <div className='Mounts-Section'>{mountsElement}</div>;
+  return (
+    <div className='Mounts-Section'>
+      {mountsElement}
+    </div>
+  ); 
 };
 
 export default MountsSection;

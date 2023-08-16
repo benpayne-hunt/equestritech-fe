@@ -42,18 +42,19 @@ const Card = (props: Props) => {
             countryCode: '',
             sex: riderSex,
             age: riderAge,
-            record: [],
-            mountIds: [],
-            imageUrl: '',
+            record: rider?.record,
+            mountIds: rider?.mountIds,
+            imageUrl: rider?.imageUrl,
           },
         });
         const riders = await callApi({ method: 'GET', path: 'riders/all' });
         setRiders(riders);
+        setIsEditable(false);
       };
 
       updateRider();
     },
-    [riderAge, riderForeName, riderSex, riderSurName, setRiders]
+    [riderAge, riderForeName, riderSex, riderSurName, rider.record, rider.mountIds, rider.imageUrl, setRiders]
   );
 
   const handleClickEdit = useCallback(() => {
@@ -95,7 +96,6 @@ const Card = (props: Props) => {
 
   const handleSetRiderSex = useCallback(
     (event: React.FocusEvent<HTMLParagraphElement>) => {
-      console.log(event?.target?.innerText);
       setRiderSex(event?.target?.innerText);
     },
     []
@@ -112,7 +112,7 @@ const Card = (props: Props) => {
           >
             <img
               className='Flag'
-              src={`https://flagsapi.com/${rider?.countryCode}/shiny/64.png`}
+              src={rider.countryCode ? `https://flagsapi.com/${rider?.countryCode}/shiny/64.png` : ''}
               alt=''
             />
           </Tooltip>
@@ -141,7 +141,6 @@ const Card = (props: Props) => {
             contentEditable={isEditable}
             className='Rider-Name'
             onBlur={(event) => {
-              console.log('we got here');
               handleSetRiderName(event);
             }}
           >

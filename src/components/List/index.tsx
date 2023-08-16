@@ -1,27 +1,17 @@
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { CircularProgress, IconButton, Tooltip } from '@mui/material';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import ActionBar from './components/ActionBar';
 import Card from './components/Card';
+import CreateDialog from './components/CreateDialog';
 import callApi from '../../helpers/callApi';
+import { Rider } from '../../types/Rider';
 import './styles.css';
-
-interface Rider {
-  _id: string;
-  foreName: string;
-  surName: string;
-  countryCode: string;
-  sex: string;
-  age: number;
-  record: {
-    [key: string]: number;
-  }[];
-  mountIds: string[];
-  imageUrl: string;
-}
 
 const List = () => {
   const [riders, setRiders] = useState<Rider[]>([]);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchRiders = async () => {
@@ -32,17 +22,28 @@ const List = () => {
     fetchRiders();
   }, []);
 
+  const handleCloseCreate = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+
+  const handleClickCreate = useCallback(() => {
+    setIsOpen(true);
+  }, []);
+
   const cards = useMemo(() => {
     const ridersCards = riders?.map((rider: Rider, index) => {
-      return (
-        <Card key={rider?._id} rider={rider} setRiders={setRiders}/>
-      );
+      return <Card key={rider?._id} rider={rider} setRiders={setRiders} />;
     });
 
     const createCard = (
       <Tooltip key='create' title='Create' placement='bottom-end'>
-        <div className='Create-Card'>
-          <IconButton onClick={() => {}}>
+        <div
+          className='Create-Card'
+          onClick={() => {
+            handleClickCreate();
+          }}
+        >
+          <IconButton>
             <AddCircleOutlineIcon className='Icon' />
           </IconButton>
         </div>
@@ -52,14 +53,23 @@ const List = () => {
     ridersCards.unshift(createCard);
 
     return ridersCards;
-  }, [riders]);
+  }, [handleClickCreate, riders]);
 
   return (
-    <div className='Container'>
-      <div className='Card-Container'>
-        {riders.length > 0 ? cards : <CircularProgress />}
+    <>
+      <ActionBar />
+      <div className='Container'>
+        <div className='Card-Container'>
+          {riders.length > 0 ? cards : <CircularProgress />}
+        </div>
       </div>
-    </div>
+      <CreateDialog
+        isOpen={isOpen}
+        onClose={() => handleCloseCreate()}
+        riders={riders}
+        setRiders={setRiders}
+      />
+    </>
   );
 };
 

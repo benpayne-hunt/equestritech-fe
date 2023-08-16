@@ -1,5 +1,5 @@
 import { Tooltip } from '@mui/material';
-import { useCallback, useMemo } from 'react';
+import { ReactNode, useCallback, useMemo } from 'react';
 
 import './styles.css';
 
@@ -33,7 +33,7 @@ const RecordSection = (props: Props) => {
   }, []);
 
   const prizeElement = useMemo(() => {
-    let recordElement: JSX.Element[] = [];
+    let recordElement: ReactNode[] = [];
 
     record.forEach((event, eventIndex) => {
       const eventKeys = Object.keys(event);
@@ -62,7 +62,10 @@ const RecordSection = (props: Props) => {
     return <div className='Prize-Cabinet'>{recordElement}</div>;
   }, [generateEmoji, record]);
 
-  return <div className='Record-Section'>{prizeElement}</div>;
+  return <div className='Record-Section'>
+    <h4 className='Mounts-Label'>Mounts</h4>
+    {prizeElement}
+    </div>;
 };
 
 export default RecordSection;
