@@ -9,7 +9,7 @@ interface Props {
 const callApi = async (props: Props) => {
   const { method, path, body } = props;
 
-  const url = `http://127.0.0.1:8000/api/${path}`;
+  const url = `http://127.0.0.1:8002/api/${path}`;
   let data = null;
 
   if (method === 'GET') {
