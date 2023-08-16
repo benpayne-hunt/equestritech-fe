@@ -1,6 +1,8 @@
+import { Tooltip } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 
 import callApi from '../../../../helpers/callApi';
+import './styles.css';
 
 type Mount = {
   _id: string;
@@ -12,6 +14,7 @@ type Mount = {
   age: number;
   height: number;
   riderId: string;
+  imageUrl: string | undefined;
 };
 
 interface Props {
@@ -39,9 +42,24 @@ const MountsSection = (props: Props) => {
   const mountsElement = useMemo(() => {
     return mounts.map((mount) => {
       return (
-        <div key={mount?._id}>
-          <p>{mount?.stableName}</p>
-        </div>
+        <Tooltip
+          key={mount?._id}
+          title={`${mount?.pedigreeName} (${mount?.stableName}) | ${mount?.age} year old ${mount?.height}hh ${mount?.colour} ${mount?.sex} | ${mount?.countryCode}`}
+          placement='right-end'
+        >
+          <div className='Image-Flag'>
+            {mount?.imageUrl ? (
+              <>
+                <img className='Mount-Image' src={mount?.imageUrl} alt='' />
+                <img
+                  className='Mount-Flag'
+                  src={`https://flagsapi.com/${mount?.countryCode}/shiny/64.png`}
+                  alt=''
+                />
+              </>
+            ) : null}
+          </div>
+        </Tooltip>
       );
     });
   }, [mounts]);
